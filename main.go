@@ -1,9 +1,10 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
-	"./ManyoConv"
+	"./manyo"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,9 +23,12 @@ func Convert(c *gin.Context) {
 		return
 	}
 
-	json.Kana = ManyoConv.ConvertManyoToKana(json.Manyo)
+	log.Println(json)
+
+	json.Kana = manyo.ConvertManyoToKana(json.Manyo)
 
 	c.JSON(http.StatusOK, json)
+	return
 }
 
 func main() {

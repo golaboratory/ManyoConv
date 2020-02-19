@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Vue from 'vue'
 
 export default {
   name: 'HelloWorld',
@@ -31,13 +32,16 @@ export default {
   methods: {
     convert () {
       const text = this.manyo
-      this.manyo = ''
+      Vue.set(this, 'manyo', '')
       axios.post('/convert', {
         manyo: text,
         kana: ''
       })
         .then((res) => {
-          // console.log(res)
+          // alert(JSON.stringify(res.data))
+          const list = this.convList
+          list.unshift(res.data)
+          Vue.set(this, 'convList', list)
         })
     }
   }

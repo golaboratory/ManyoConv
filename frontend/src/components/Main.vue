@@ -5,17 +5,13 @@
       color="indigo"
       dark
     >
-      <v-toolbar-title>Application</v-toolbar-title>
+      <v-toolbar-title>万葉仮名変換</v-toolbar-title>
     </v-app-bar>
 
     <v-content>
-      <v-container
-        class="fill-height"
-        fluid
-      >
+      <v-container>
         <v-row
           align="center"
-          justify="center"
         >
           <v-col class="text-center">
             <v-card
@@ -24,11 +20,11 @@
             >
               <v-list-item three-line>
                 <v-list-item-content>
-                  <v-list-item-title class="headline mb-1">万葉仮名変換</v-list-item-title>
                   <v-list-item-subtitle>かなに変換したい万葉仮名を入力し、変換をタッチしてください</v-list-item-subtitle>
                   <v-text-field
                     v-model="manyo"
                     label="万葉仮名"
+                    style="text-align:center"
                     solo
                   ></v-text-field>
                 </v-list-item-content>
@@ -42,22 +38,42 @@
                   rounded
                   color="primary"
                   :disabled="enableButton"
+                  v-on:click="convert"
                 >
                   変換
                 </v-btn>
                 <v-spacer/>
               </v-card-actions>
             </v-card>
-            <template v-if="existsList">
-              <ul v-for="item in convList" v-bind:key="item.manyo">
-                <li>
+
+          </v-col>
+        </v-row>
+        <v-row
+          align="center"
+        >
+          <v-col class="text-center"
+            :xs="12"
+            :sm="12"
+            :md="6"
+            :lg="4"
+            :xl="3"
+            v-for="item in convList"
+            v-bind:key="item.manyo">
+            <v-card
+              class="mx-auto"
+              outlined
+            >
+              <v-card-text>
+                <p class="display-1 text--primary">
                   {{ item.manyo }}
-                </li>
-                <li>
+                </p>
+                <v-icon x-large>expand_more</v-icon>
+                <p class="display-1 text--primary">
                   {{ item.kana }}
-                </li>
-              </ul>
-            </template>
+                </p>
+              </v-card-text>
+
+            </v-card>
           </v-col>
         </v-row>
       </v-container>
@@ -66,7 +82,7 @@
       color="indigo"
       app
     >
-      <span class="white--text">&copy; 2019</span>
+      <span class="white--text">GoLaboratory &copy; 2020</span>
     </v-footer>
   </v-app>
 </template>
