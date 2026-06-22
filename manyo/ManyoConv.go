@@ -1,6 +1,7 @@
 package manyo
 
 import (
+	"sort"
 	"strings"
 )
 
@@ -100,22 +101,41 @@ var manyolist = []Element{
 	Element{"かしき", []string{"炊"}},
 }
 
-// ConvertManyoToKana 万葉仮名から仮名に変換する
-func ConvertManyoToKana(s string) string {
-	var result = s
+type lookup struct {
+	Kanji string
+	Kana  string
+}
+
+var lookups []lookup
+
+func init() {
 	for _, e := range manyoKunlist {
 		for _, c := range e.KanjiList {
-			if strings.Index(result, c) != -1 {
-				result = strings.ReplaceAll(result, c, e.Kana)
-			}
+			lookups = append(lookups, lookup{Kanji: c, Kana: e.Kana})
+		}
+	}
+	for _, e := range manyolist {
+		for _, c := range e.KanjiList {
+			lookups = append(lookups, lookup{Kanji: c, Kana: e.Kana})
 		}
 	}
 
-	for _, e := range manyolist {
-		for _, c := range e.KanjiList {
-			if strings.Index(result, c) != -1 {
-				result = strings.ReplaceAll(result, c, e.Kana)
-			}
+	// Sort by the length of the Kanji string in descending order.
+	// In Go, `len(c)` is string byte length. Since kanji are multibyte, longer strings
+	// have longer byte lengths, but it is safer to use rune count for character length.
+	sort.Slice(lookups, func(i, j int) bool {
+		r1 := []rune(lookups[i].Kanji)
+		r2 := []rune(lookups[j].Kanji)
+		return len(r1) > len(r2)
+	})
+}
+
+// ConvertManyoToKana 万葉仮名から仮名に変換する
+func ConvertManyoToKana(s string) string {
+	var result = s
+	for _, l := range lookups {
+		if strings.Index(result, l.Kanji) != -1 {
+			result = strings.ReplaceAll(result, l.Kanji, l.Kana)
 		}
 	}
 	return result

@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"./manyo"
+	"manyoconv/manyo"
 
 	"github.com/gin-gonic/gin"
 )
